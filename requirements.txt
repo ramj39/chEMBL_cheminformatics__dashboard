@@ -1,7 +1,5 @@
-streamlit
-pandas
-requests
-chembl-webresource-client
-rdkit-pypi
-openpyxl
-xlsxwriter
+streamlit==1.46.1
+pandas==2.3.1
+requests==2.32.4
+chembl-webresource-client==0.10.9
+rdkit-pypi==2022.9.5
