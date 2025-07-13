@@ -1,3 +1,4 @@
+🚀 [Launch Dashboard](https://chemblcheminformaticsdashboard-cupxnrw6yf56zrsglzc8uk.streamlit.app/)
 # 🔬 ChEMBL Cheminformatics Dashboard
 
 A streamlined, interactive dashboard built with **Streamlit** to explore compound information, bioactivity data, and molecular similarity using the ChEMBL database and cheminformatics tools.
