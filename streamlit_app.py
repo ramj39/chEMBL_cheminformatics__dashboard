@@ -1,4 +1,9 @@
 import streamlit as st
+st.sidebar.title("🔗 Dashboard Info")
+st.sidebar.markdown("""
+**Launch URL**  
+[Open in Streamlit](https://chemblcheminformaticsdashboard-cupxnrw6yf56zrsglzc8uk.streamlit.app/)
+""")
 import requests
 from urllib.parse import quote
 from chembl_webresource_client.new_client import new_client
