@@ -149,14 +149,34 @@ with tab2:
         else:
             st.error("❌ Invalid ChEMBL ID format. It should look like 'CHEMBL25'.")
 
-# -------------------------------
-# 🔍 Tab 3: Similar Compounds
+## 🔍 Tab 3: Similar Compounds
 # -------------------------------
 with tab3:
-    query_smiles = st.text_input(
-        "Enter SMILES to find similar compounds",
-        help="Enter a valid SMILES representation of a molecule."
-    ).strip()
+    st.markdown("### 🔬 Find Similar Compounds")
+
+    input_mode = st.radio("Input type:", ["SMILES", "ChEMBL ID"], horizontal=True)
+    query_smiles = ""
+
+    if input_mode == "SMILES":
+        query_smiles = st.text_input(
+            "Enter SMILES to find similar compounds",
+            help="Enter a valid SMILES representation of a molecule."
+        ).strip()
+
+    elif input_mode == "ChEMBL ID":
+        chembl_id = st.text_input(
+            "Enter ChEMBL ID to fetch compound",
+            help="Example: CHEMBL25"
+        ).strip().upper()
+
+        if chembl_id:
+            res = molecule_client.filter(molecule_chembl_id=chembl_id).only(['molecule_structures'])
+            query_smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', "")
+
+            if query_smiles:
+                st.success(f"✅ SMILES retrieved: `{query_smiles}`")
+            else:
+                st.error("❌ No SMILES found for this ChEMBL ID.")
 
     if query_smiles:
         try:
