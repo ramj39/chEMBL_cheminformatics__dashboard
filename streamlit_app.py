@@ -157,11 +157,11 @@ with tab3:
     input_mode = st.radio("Input type:", ["SMILES", "ChEMBL ID"], horizontal=True)
     query_smiles = ""
 
-    if input_mode == "SMILES":
-        query_smiles = st.text_input(
-            "Enter SMILES to find similar compounds",
-            help="Enter a valid SMILES representation of a molecule."
-        ).strip()
+    #if input_mode == "SMILES":
+     #   query_smiles = st.text_input(
+      #      "Enter SMILES to find similar compounds",
+      #      help="Enter a valid SMILES representation of a molecule."
+       # ).strip()
 
     elif input_mode == "ChEMBL ID":
         chembl_id = st.text_input(
