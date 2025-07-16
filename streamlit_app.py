@@ -163,7 +163,7 @@ with tab3:
       #      help="Enter a valid SMILES representation of a molecule."
        # ).strip()
 
-    elif input_mode == "ChEMBL ID":
+    if input_mode == "ChEMBL ID":
         chembl_id = st.text_input(
             "Enter ChEMBL ID to fetch compound",
             help="Example: CHEMBL25"
