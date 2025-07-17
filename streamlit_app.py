@@ -239,8 +239,8 @@ with tab3:
                   # 👎 Show collective failure warning
                     if failed_names:
                         st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
-                    except Exception as e:
-                        st.error(f"❌ SMILES parsing failed: {str(e)}")
+                except Exception as e:
+                    st.error(f"❌ SMILES parsing failed: {str(e)}")
            # st.dataframe(df_sim)
             #            res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
             #        if res:
