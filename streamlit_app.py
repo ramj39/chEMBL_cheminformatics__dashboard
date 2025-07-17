@@ -192,34 +192,35 @@ with tab3:
             if query_mol is None:
                 raise ValueError("Invalid SMILES")
 
-     query_fp = AllChem.GetMorganFingerprintAsBitVect(query_mol, 2, nBits=2048)
-st.info("🔍 Comparing against user-provided compounds...")
+            query_fp = AllChem.GetMorganFingerprintAsBitVect(query_mol, 2, nBits=2048)
+            st.info("🔍 Comparing against user-provided compounds...")
 
-compound_input = st.text_area(
-    "Enter compound names (comma-separated)",
-    help="Examples: aspirin, ibuprofen, acetaminophen",
-    key="compound_names_input"
-)
-sample_names = [name.strip() for name in compound_input.split(",") if name.strip()]
-sim_data = []
+            compound_input = st.text_area(
+                 "Enter compound names (comma-separated)",
+                  help="Examples: aspirin, ibuprofen, acetaminophen",
+                  key="compound_names_input"
+            )
+            sample_names = [name.strip() for name in compound_input.split(",") if name.strip()]
+            sim_data = []
 
-if sample_names:
-    for name in sample_names:
-        res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
-        if res:
-            smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', None)
-            if smiles:
-                mol = Chem.MolFromSmiles(smiles)
-                fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
-                sim = DataStructs.TanimotoSimilarity(query_fp, fp)
-                sim_data.append({
-                    "Name": name,
-                    "SMILES": smiles,
-                    "Similarity": round(sim, 3)
-                })
+            if sample_names:
+                for name in sample_names:
+                    res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
+                    if res:
+                        smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', None)
+                        if smiles:
+                             mol = Chem.MolFromSmiles(smiles)
+                             fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
+                             sim = DataStructs.TanimotoSimilarity(query_fp, fp)
+                             sim_data.append({
+                                  "Name": name,
+                                  "SMILES": smiles,
+                                  "Similarity": round(sim, 3)
+                             })
 
-    df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
-    st.dataframe(df_sim)
-else:
-    st.warning("⚠️ Please enter at least one compound name to compare.")
-      
+               df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+               st.dataframe(df_sim)
+        else:
+               st.warning("⚠️ Please enter at least one compound name to compare.")
+except Exception as e:
+        st.error(f"❌ SMILES parsing failed: {str(e)}")    
