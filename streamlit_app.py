@@ -233,14 +233,14 @@ with tab3:
                     except Exception:
                         failed_names.append(name)
                  # 👉 Show results
-                if sim_data:
-                    df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
-                    st.dataframe(df_sim)
+                    if sim_data:
+                        df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+                        st.dataframe(df_sim)
                   # 👎 Show collective failure warning
-                if failed_names:
-                    st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
-                except Exception as e:
-                    st.error(f"❌ SMILES parsing failed: {str(e)}")
+                    if failed_names:
+                        st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
+                    except Exception as e:
+                        st.error(f"❌ SMILES parsing failed: {str(e)}")
            # st.dataframe(df_sim)
             #            res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
             #        if res:
