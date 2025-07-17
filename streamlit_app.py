@@ -167,7 +167,7 @@ with tab3:
     if input_mode == "ChEMBL ID":
         chembl_id = st.text_input(
             "Enter ChEMBL ID to fetch compound",
-            help="Example: CHEMBL25"
+            help="Example: CHEMBL25",
             key="chembl_input_tab3"
         ).strip().upper()
 
