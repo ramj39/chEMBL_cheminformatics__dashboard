@@ -165,78 +165,104 @@ with tab2:
 with tab3:
     st.subheader("🔬 Compare to Named Compounds")
 
-    try:
-        query_fp = AllChem.GetMorganFingerprintAsBitVect(query_mol, 2, nBits=2048)
-        st.info("🔍 Comparing against user-provided compound names...")
+    # 1️⃣ Choose input mode
+    input_mode = st.radio(
+        "Select query type",
+        ["SMILES", "ChEMBL ID"],
+        key="query_mode",
+        help="Choose SMILES directly or look up by ChEMBL ID"
+    )
 
-        # 📌 Example preset compounds
-        preset = st.selectbox(
-            "💡 Load example compound set?",
-            ["None", "Painkillers", "Stimulants", "Antibiotics"]
-        )
+    query_mol = None
+    query_smiles = ""
 
-        preset_dict = {
-            "Painkillers": "aspirin, ibuprofen, acetaminophen",
-            "Stimulants": "caffeine, amphetamine, modafinil",
-            "Antibiotics": "amoxicillin, tetracycline, ciprofloxacin"
-        }
+    if input_mode == "SMILES":
+        query_smiles = st.text_input("Enter SMILES 🧪", key="smiles_input")
+        if query_smiles:
+            query_mol = Chem.MolFromSmiles(query_smiles)
+    elif input_mode == "ChEMBL ID":
+        chembl_id = st.text_input("Enter ChEMBL ID 🔍", key="chembl_input")
+        if chembl_id:
+            try:
+                res = molecule_client.filter(molecule_chembl_id=chembl_id).only(['molecule_structures'])
+                query_smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', None) if res else None
+                query_mol = Chem.MolFromSmiles(query_smiles) if query_smiles else None
+            except Exception:
+                query_mol = None
 
-        # 📝 Compound input
-        default_text = preset_dict.get(preset, "")
-        compound_input = st.text_area(
-            "Enter compound names (comma or newline-separated)",
-            value=default_text,
-            help="Examples: aspirin, ibuprofen, caffeine",
-            key="compound_names_input"
-        )
+    if query_mol:
+        try:
+            query_fp = AllChem.GetMorganFingerprintAsBitVect(query_mol, 2, nBits=2048)
+            st.success("✅ Query molecule parsed successfully.")
 
-        # 🔁 Clear input toggle
-        if st.checkbox("🔄 Clear compound input"):
-            st.experimental_rerun()
+            # 2️⃣ Example compound presets
+            preset = st.selectbox(
+                "Load example compounds (optional)",
+                ["None", "Painkillers", "Stimulants", "Antibiotics"],
+                index=0
+            )
 
-        raw_names = compound_input.replace("\n", ",")
-        sample_names = [name.strip() for name in raw_names.split(",") if name.strip()]
-        sim_data = []
-        failed_names = []
+            preset_dict = {
+                "Painkillers": "aspirin, ibuprofen, acetaminophen",
+                "Stimulants": "caffeine, amphetamine, modafinil",
+                "Antibiotics": "amoxicillin, tetracycline, ciprofloxacin"
+            }
 
-        if sample_names:
-            for name in sample_names:
-                try:
-                    res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
-                    smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', None) if res else None
-                    mol = Chem.MolFromSmiles(smiles) if smiles else None
+            default_text = preset_dict.get(preset, "")
+            compound_input = st.text_area(
+                "Enter compound names (comma or newline-separated)",
+                value=default_text,
+                help="Examples: aspirin, ibuprofen, caffeine"
+            )
 
-                    if mol:
-                        fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
-                        sim = DataStructs.TanimotoSimilarity(query_fp, fp)
-                        sim_data.append({
-                            "Name": name,
-                            "SMILES": smiles,
-                            "Similarity": round(sim, 3)
-                        })
-                    else:
+            if st.checkbox("🔄 Clear compound input"):
+                compound_input = ""
+
+            raw_names = compound_input.replace("\n", ",")
+            sample_names = [name.strip() for name in raw_names.split(",") if name.strip()]
+            sim_data = []
+            failed_names = []
+
+            if sample_names:
+                for name in sample_names:
+                    try:
+                        res = molecule_client.filter(pref_name__iexact=name).only(['molecule_chembl_id', 'molecule_structures'])
+                        smiles = res[0].get('molecule_structures', {}).get('canonical_smiles', None) if res else None
+                        mol = Chem.MolFromSmiles(smiles) if smiles else None
+
+                        if mol:
+                            fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=2048)
+                            sim = DataStructs.TanimotoSimilarity(query_fp, fp)
+                            sim_data.append({
+                                "Name": name,
+                                "SMILES": smiles,
+                                "Similarity": round(sim, 3)
+                            })
+                        else:
+                            failed_names.append(name)
+                    except Exception:
                         failed_names.append(name)
-                except Exception:
-                    failed_names.append(name)
 
-            if sim_data:
-                df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
-                st.success(f"✅ Successfully compared {len(sim_data)} compound(s).")
-                st.dataframe(df_sim)
+                if sim_data:
+                    df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+                    st.success(f"✅ Compared {len(sim_data)} compound(s) successfully.")
+                    st.dataframe(df_sim)
 
-                # 📥 Download button
-                csv = df_sim.to_csv(index=False).encode('utf-8')
-                st.download_button(
-                    label="📥 Download Results as CSV",
-                    data=csv,
-                    file_name="similarity_results.csv",
-                    mime="text/csv"
-                )
+                    # Download button
+                    csv = df_sim.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="📥 Download Results as CSV",
+                        data=csv,
+                        file_name="similarity_results.csv",
+                        mime="text/csv"
+                    )
 
-            if failed_names:
-                st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
-        else:
-            st.warning("⚠️ Please enter at least one compound name.")
+                if failed_names:
+                    st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
+            else:
+                st.warning("⚠️ Please enter at least one compound name to compare.")
 
-    except Exception as e:
-        st.error(f"❌ SMILES parsing failed: {str(e)}")
+        except Exception as e:
+            st.error(f"❌ SMILES parsing failed: {str(e)}")
+    else:
+        st.info("Enter a valid query above to begin comparison.")
