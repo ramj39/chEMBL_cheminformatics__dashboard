@@ -175,7 +175,7 @@ with tab3:
             help="Example: CHEMBL45",
             key="chembl_input_2"
          ).strip().upper()    
-)
+
 
         if chembl_id:
             res = molecule_client.filter(molecule_chembl_id=chembl_id).only(['molecule_structures'])
