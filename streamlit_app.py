@@ -218,9 +218,9 @@ with tab3:
                                   "Similarity": round(sim, 3)
                              })
 
-               df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
-               st.dataframe(df_sim)
-        else:
-               st.warning("⚠️ Please enter at least one compound name to compare.")
+                df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+                st.dataframe(df_sim)
+            else:
+                st.warning("⚠️ Please enter at least one compound name to compare.")
 except Exception as e:
         st.error(f"❌ SMILES parsing failed: {str(e)}")    
