@@ -12,6 +12,17 @@ from rdkit.Chem import Draw, AllChem, DataStructs
 import pandas as pd
 import io
 from utils import get_query_smiles
+# 👋 Sidebar About Section
+with st.sidebar:
+    st.markdown("## ℹ️ About This App")
+    st.write("""
+    A cheminformatics dashboard that allows molecular similarity comparisons 
+    using ChEMBL data and RDKit fingerprints 🧪🔍
+    - Input a compound using SMILES or ChEMBL ID
+    - Compare it to user-defined compound names
+    - View similarity scores and structural representations
+    Built with ❤️ by [subramanianRamajayam] using Streamlit, RDKit, and ChEMBL.
+""")  
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
 activity_client = new_client.activity
