@@ -231,7 +231,7 @@ with tab3:
                                           "SMILES": smiles,
                                           "Similarity": round(sim, 3)
                                       })   
-                                   else:
+                              else:
                                       failed_names.append(name)
                               except Exception:
                                    failed_names.append(name)
