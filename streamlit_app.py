@@ -222,5 +222,5 @@ with tab3:
                 st.dataframe(df_sim)
             else:
                 st.warning("⚠️ Please enter at least one compound name to compare.")
-except Exception as e:
-        st.error(f"❌ SMILES parsing failed: {str(e)}")    
+        except Exception as e:
+                st.error(f"❌ SMILES parsing failed: {str(e)}")    
