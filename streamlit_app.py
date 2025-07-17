@@ -165,24 +165,40 @@ with tab2:
 with tab3:
     st.subheader("🔬 Compare to Named Compounds")
 
-    # Step 1: Query fingerprint (already parsed from SMILES earlier)
     try:
         query_fp = AllChem.GetMorganFingerprintAsBitVect(query_mol, 2, nBits=2048)
         st.info("🔍 Comparing against user-provided compound names...")
 
-        # Step 2: Compound input
+        # 📌 Example preset compounds
+        preset = st.selectbox(
+            "💡 Load example compound set?",
+            ["None", "Painkillers", "Stimulants", "Antibiotics"]
+        )
+
+        preset_dict = {
+            "Painkillers": "aspirin, ibuprofen, acetaminophen",
+            "Stimulants": "caffeine, amphetamine, modafinil",
+            "Antibiotics": "amoxicillin, tetracycline, ciprofloxacin"
+        }
+
+        # 📝 Compound input
+        default_text = preset_dict.get(preset, "")
         compound_input = st.text_area(
             "Enter compound names (comma or newline-separated)",
+            value=default_text,
             help="Examples: aspirin, ibuprofen, caffeine",
             key="compound_names_input"
         )
 
-        raw_names = compound_input.replace("\n", ",")  # Normalize input
+        # 🔁 Clear input toggle
+        if st.checkbox("🔄 Clear compound input"):
+            st.experimental_rerun()
+
+        raw_names = compound_input.replace("\n", ",")
         sample_names = [name.strip() for name in raw_names.split(",") if name.strip()]
         sim_data = []
         failed_names = []
 
-        # Step 3: Comparison loop
         if sample_names:
             for name in sample_names:
                 try:
@@ -203,18 +219,24 @@ with tab3:
                 except Exception:
                     failed_names.append(name)
 
-            # Step 4: Show results
             if sim_data:
-                st.success(f"✅ Successfully compared {len(sim_data)} compound(s).")
                 df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+                st.success(f"✅ Successfully compared {len(sim_data)} compound(s).")
                 st.dataframe(df_sim)
+
+                # 📥 Download button
+                csv = df_sim.to_csv(index=False).encode('utf-8')
+                st.download_button(
+                    label="📥 Download Results as CSV",
+                    data=csv,
+                    file_name="similarity_results.csv",
+                    mime="text/csv"
+                )
 
             if failed_names:
                 st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
-
         else:
-            st.warning("⚠️ Please enter at least one compound name to compare.")
+            st.warning("⚠️ Please enter at least one compound name.")
 
     except Exception as e:
         st.error(f"❌ SMILES parsing failed: {str(e)}")
-
