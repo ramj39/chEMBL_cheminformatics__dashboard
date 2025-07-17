@@ -168,8 +168,14 @@ with tab3:
         chembl_id = st.text_input(
             "Enter ChEMBL ID to fetch compound",
             help="Example: CHEMBL25",
-            key="chembl_input_tab3"
+            key="chembl_input_1"
         ).strip().upper()
+        chembl_id_2 = st.text_input(
+           "Enter ChEMBL ID to fetch compound",
+            help="Example: CHEMBL45",
+            key="chembl_input_2"
+         ).strip().upper()    
+)
 
         if chembl_id:
             res = molecule_client.filter(molecule_chembl_id=chembl_id).only(['molecule_structures'])
