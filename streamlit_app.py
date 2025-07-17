@@ -11,7 +11,7 @@ from rdkit import Chem
 from rdkit.Chem import Draw, AllChem, DataStructs
 import pandas as pd
 import io
-
+from utils import get_query_smiles
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
 activity_client = new_client.activity
@@ -156,6 +156,7 @@ with tab3:
 
     input_mode = st.radio("Input type:", ["SMILES", "ChEMBL ID"], horizontal=True)
     query_smiles = ""
+    query_smiles = get_query_smiles(input_mode, molecule_client)
 
     #if input_mode == "SMILES":
      #   query_smiles = st.text_input(
