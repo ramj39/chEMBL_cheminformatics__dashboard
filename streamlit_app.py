@@ -237,13 +237,13 @@ with tab3:
                                    failed_names.append(name)
 
                           # 👉 Show results
-                           if sim_data:
-                               df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
-                               st.dataframe(df_sim)
+                              if sim_data:
+                                 df_sim = pd.DataFrame(sim_data).sort_values(by="Similarity", ascending=False)
+                                 st.dataframe(df_sim)
 
                           # 👎 Show collective failure warning
-                            if failed_names:
-                               st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
+                              if failed_names:
+                                 st.error(f"❌ Could not process the following compounds: {', '.join(failed_names)}")
 
                    else:
                          st.warning("⚠️ Please enter at least one compound name to compare.")
