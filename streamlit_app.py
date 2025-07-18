@@ -23,6 +23,20 @@ with st.sidebar:
     - View similarity scores and structural representations
     Built with ❤️ by [subramanianRamajayam] using Streamlit, RDKit, and ChEMBL.
 """)  
+import streamlit as st
+from feedback import collect_feedback, save_feedback
+
+st.subheader("💬 Share your feedback")
+user_input = st.text_area("What did you like? What can we improve?", "")
+
+if st.button("Submit Feedback"):
+    data = collect_feedback(user_input)
+    if data["status"] == "submitted":
+        save_feedback(data)
+        st.success("Thanks for your feedback!")
+    else:
+        st.warning("Please enter something before submitting.")
+    
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
 activity_client = new_client.activity
