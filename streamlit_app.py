@@ -32,8 +32,8 @@ user_input = st.text_area("What did you like? What can we improve?", "")
 if st.button("Submit Feedback"):
     data = collect_feedback(user_input)
     if data["status"] == "submitted":
-        #save_feedback(data)
-        save_feedback_to_sheet(data)
+        save_feedback(data)
+        #save_feedback_to_sheet(data)
         st.success("Thanks for your feedback!")
     else:
         st.warning("Please enter something before submitting.")
