@@ -1,4 +1,5 @@
 import streamlit as st
+from feedback import collect_feedback, save_feedback  # Your feedback logic module
 st.sidebar.title("🔗 Dashboard Info")
 st.sidebar.markdown("""
 **Launch URL**  
@@ -13,6 +14,8 @@ import pandas as pd
 import io
 from utils import get_query_smiles
 # 👋 Sidebar About Section
+# Sidebar or header UI
+st.title("🧪 Streamlit Cheminformatics Dashboard")
 with st.sidebar:
     st.markdown("## ℹ️ About This App")
     st.write("""
@@ -25,10 +28,17 @@ with st.sidebar:
 """)  
 import streamlit as st
 from feedback import collect_feedback, save_feedback
-
+# 🔬 Placeholder for Input and Core Logic
+st.markdown("### 🧬 Molecule Input Section")
+st.write("Coming soon: Enter a SMILES string or ChEMBL ID to begin analysis.")
+# Example usage stub:
+# query_smiles = get_query_smiles(user_input)
+# 🧭 Divider
+st.markdown("---")
+# 💬 Feedback Section
 st.subheader("💬 Share your feedback")
-user_input = st.text_area("What did you like? What can we improve?", "")
-
+#user_input = st.text_area("What did you like? What can we improve?", "")
+user_input = st.text_area("Let us know what you liked, what confused you, or new ideas you'd love!")
 if st.button("Submit Feedback"):
     data = collect_feedback(user_input)
     if data["status"] == "submitted":
