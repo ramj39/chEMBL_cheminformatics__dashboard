@@ -47,7 +47,9 @@ if st.button("Submit Feedback"):
         st.success("Thanks for your feedback!")
     else:
         st.warning("Please enter something before submitting.")
-    
+# 🕵️ Show the current directory where feedback_log.txt is saved   
+import os
+st.write("📂 Current working directory:", os.getcwd())
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
 activity_client = new_client.activity
