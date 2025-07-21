@@ -58,6 +58,9 @@ if os.path.exists("feedback_log.csv"):
     df = pd.read_csv("feedback_log.csv", header=None, names=["Timestamp", "Status", "Feedback"])
     st.markdown("### 📝 Submitted Feedback History")
     st.dataframe(df)
+with open("feedback_log.txt", "rb") as f:
+    st.download_button("⬇️ Download Feedback Log", f, file_name="feedback_log.txt", mime="text/plain")
+    
 
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
