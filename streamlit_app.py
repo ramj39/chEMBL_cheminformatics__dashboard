@@ -60,7 +60,8 @@ if os.path.exists("feedback_log.csv"):
     st.dataframe(df)
 with open("feedback_log.txt", "rb") as f:
     st.download_button("⬇️ Download Feedback Log", f, file_name="feedback_log.csv", mime="text/csv")
-    
+else:
+    st.info("No feedback submitted yet. Your first entry will appear here.")
 
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
