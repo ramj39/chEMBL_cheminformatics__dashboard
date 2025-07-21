@@ -12,10 +12,10 @@ def collect_feedback(user_input: str) -> dict:
 #   with open(filepath, "a", newline="", encoding="utf-8") as f:
 #       writer = csv.writer(f)
 #       writer.writerow([timestamp, feedback_data["status"], feedback_data["feedback"]])
-def save_feedback(feedback_data: dict, filepath="feedback_log.csv") -> None:
-    from datetime import datetime
-    import csv
+import csv
+from datetime import datetime
 
+def save_feedback(feedback_data: dict, filepath="feedback_log.csv") -> None:
     timestamp = datetime.now().isoformat(timespec="seconds")
     status = feedback_data.get("status", "submitted")
     comment = feedback_data.get("feedback", "")
@@ -23,4 +23,16 @@ def save_feedback(feedback_data: dict, filepath="feedback_log.csv") -> None:
     with open(filepath, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([timestamp, status, comment])
+
+#def save_feedback(feedback_data: dict, filepath="feedback_log.csv") -> None:
+#   from datetime import datetime
+#   import csv
+
+#   timestamp = datetime.now().isoformat(timespec="seconds")
+#   status = feedback_data.get("status", "submitted")
+#   comment = feedback_data.get("feedback", "")
+
+#   with open(filepath, "a", newline="", encoding="utf-8") as f:
+#       writer = csv.writer(f)
+#       writer.writerow([timestamp, status, comment])
 
