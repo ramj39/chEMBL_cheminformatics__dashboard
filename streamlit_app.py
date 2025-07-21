@@ -27,7 +27,8 @@ with st.sidebar:
     Built with ❤️ by [subramanianRamajayam] using Streamlit, RDKit, and ChEMBL.
 """)  
 import streamlit as st
-from feedback import collect_feedback, save_feedback
+#from feedback import collect_feedback, save_feedback
+from feedback import collect_feedback, save_feedback  # CSV version now
 # 🔬 Placeholder for Input and Core Logic
 st.markdown("### 🧬 Molecule Input Section")
 st.write("Coming soon: Enter a SMILES string or ChEMBL ID to begin analysis.")
