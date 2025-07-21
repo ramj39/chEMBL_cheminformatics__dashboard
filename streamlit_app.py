@@ -53,15 +53,28 @@ import os
 st.write("📂 Current working directory:", os.getcwd())
 import pandas as pd
 import os
+#import os
+#import pandas as pd
+import streamlit as st
 
+# 💬 Feedback log viewer and exporter
 if os.path.exists("feedback_log.csv"):
     df = pd.read_csv("feedback_log.csv", header=None, names=["Timestamp", "Status", "Feedback"])
     st.markdown("### 📝 Submitted Feedback History")
     st.dataframe(df)
-    with open("feedback_log.txt", "rb") as f:
-        st.download_button("⬇️ Download Feedback Log", f, file_name="feedback_log.csv", mime="text/csv")
+
+    with open("feedback_log.csv", "rb") as f:
+        st.download_button("⬇️ Download Feedback CSV", f, file_name="feedback_log.csv", mime="text/csv")
 else:
     st.info("No feedback submitted yet. Your first entry will appear here.")
+#if os.path.exists("feedback_log.csv"):
+#   df = pd.read_csv("feedback_log.csv", header=None, names=["Timestamp", "Status", "Feedback"])
+#   st.markdown("### 📝 Submitted Feedback History")
+#   st.dataframe(df)
+#   with open("feedback_log.txt", "rb") as f:
+#       st.download_button("⬇️ Download Feedback Log", f, file_name="feedback_log.csv", mime="text/csv")
+#else:
+#   st.info("No feedback submitted yet. Your first entry will appear here.")
 
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
