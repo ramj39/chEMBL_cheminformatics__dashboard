@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.env/
+.venv/
+*.env
+
+# Log files
+*.log
+feedback_log.txt
+feedback_log.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Streamlit Cloud-specific
+runtime.txt
