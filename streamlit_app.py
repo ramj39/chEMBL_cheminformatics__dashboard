@@ -51,6 +51,14 @@ if st.button("Submit Feedback"):
 # 🕵️ Show the current directory where feedback_log.txt is saved   
 import os
 st.write("📂 Current working directory:", os.getcwd())
+import pandas as pd
+import os
+
+if os.path.exists("feedback_log.csv"):
+    df = pd.read_csv("feedback_log.csv", header=None, names=["Timestamp", "Status", "Feedback"])
+    st.markdown("### 📝 Submitted Feedback History")
+    st.dataframe(df)
+
 # Initialize ChEMBL clients
 molecule_client = new_client.molecule
 activity_client = new_client.activity
