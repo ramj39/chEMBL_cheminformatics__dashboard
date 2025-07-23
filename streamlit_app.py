@@ -178,7 +178,7 @@ with tab1:
             )
     else:
         st.warning("⚠️ Please enter at least one valid compound name.")
-
+st.markdown("[Molsoft L.L.C.: Drug-Likeness and molecular property prediction](https://molsoft.com/mprop/)") 
 # -------------------------------
 # 🎯 Tab 2: Bioactivity Explorer
 # -------------------------------
