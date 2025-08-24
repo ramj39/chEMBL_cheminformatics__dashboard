@@ -179,6 +179,7 @@ with tab1:
     else:
         st.warning("⚠️ Please enter at least one valid compound name.")
 st.markdown("[Molsoft L.L.C.: Drug-Likeness and molecular property prediction](https://molsoft.com/mprop/)") 
+st.text("developed by Subramanian Ramajayam")
 # -------------------------------
 # 🎯 Tab 2: Bioactivity Explorer
 # -------------------------------
@@ -319,3 +320,4 @@ with tab3:
             st.error(f"❌ SMILES parsing failed: {str(e)}")
     else:
         st.info("Enter a valid query above to begin comparison.")
+
